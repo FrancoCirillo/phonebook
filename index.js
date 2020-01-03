@@ -7,11 +7,11 @@ const bodyParser = require('body-parser')
 
 app.use(cors())
 app.use(bodyParser.json())
-morgan.token('body',  (req, res) => JSON.stringify(req.body) )
+morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 const PORT = 3001
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
 
