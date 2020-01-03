@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
     res.send('<h2>The Phonebook</h2>')
 })
 
-app.get('/persons', (req, res) => {
+app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
 
@@ -54,14 +54,14 @@ app.get('/info', (req, res) => {
 })
 
 
-app.get('/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
     if (person) response.json(person)
     else response.status(404).end()
 })
 
-app.delete('/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
@@ -76,7 +76,7 @@ function getRandomId() {
 const infoMissing = body => body.name === "" || body.number === ""
 const reapetedName = body => persons.some(person => person.name === body.name)
 
-app.post('/persons', (request, response) => {
+app.post('/api/persons', (request, response) => {
     const body = request.body
     if (infoMissing(body)) {
         return response.status(400).json({
