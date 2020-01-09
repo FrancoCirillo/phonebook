@@ -1,8 +1,9 @@
 require('dotenv').config()
+const mongoose = require('mongoose')
+const Person = require('./models/person')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const Person = require('./models/person')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -37,33 +38,34 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    if (person) response.json(person)
-    else response.status(404).end()
+    console.log(request.params.id)
+    Person.findById(request.params.id)
+        .exec((error, person) => {
+            if (person) response.json(person)
+            else {
+                response.status(404).end()
+            }
+        })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
 })
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-
 
     const person = new Person({
         name: body.name,
         number: body.number
     })
 
-    person.save().then(response => {
-        console.log(`Added ${person.name}, number ${person.number} to the phonebook`);
-        mongoose.connection.close();
-    })
+    person
+        .save()
+        .then(savedPerson => response.json(savedPerson.toJSON()))
 
-    persons = persons.concat(person)
-    response.json(person)
 })
 
