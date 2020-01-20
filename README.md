@@ -1,4 +1,8 @@
-# phonebook
-FSO - Part 3 exercises
+# Phonebook
 
-https://the-phonebook-helsinki.herokuapp.com/
+Visit: https://the-phonebook-helsinki.herokuapp.com/
+
+Made with:
+  - Node.js
+  - ReactJS
+  - MongoDB
